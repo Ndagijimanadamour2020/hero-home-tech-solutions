@@ -20,3 +20,92 @@ model SiteConfig {
   id      String @id @default(cuid())
   logoUrl String
 }
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  DEMO_SCHEDULED
+  PROPOSAL_SENT
+  WON
+  LOST
+}
+
+model Solution {
+  id             String      @id @default(cuid())
+  slug           String      @unique
+  title          String
+  tagline        String
+  problem        String      @db.Text
+  solution       String      @db.Text
+  features       String[]
+  benefits       String[]
+  targetAudience String
+  icon           String?
+  published      Boolean     @default(true)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+  demos          Demo[]
+  caseStudies    CaseStudy[]
+}
+
+model Industry {
+  id          String   @id @default(cuid())
+  slug        String   @unique
+  name        String
+  description String   @db.Text
+  icon        String?
+  useCases    String[]
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+}
+
+model Demo {
+  id         String    @id @default(cuid())
+  title      String
+  description String   @db.Text
+  screenshot String?
+  demoUrl    String?
+  features   String[]
+  solutionId String?
+  solution   Solution? @relation(fields: [solutionId], references: [id], onDelete: SetNull)
+  published  Boolean   @default(true)
+  createdAt  DateTime  @default(now())
+}
+
+model CaseStudy {
+  id           String    @id @default(cuid())
+  slug         String    @unique
+  title        String
+  clientName   String
+  challenge    String    @db.Text
+  solution     String    @db.Text
+  features     String[]
+  technologies String[]
+  impact       String[]
+  solutionId   String?
+  solutionRecord Solution? @relation(fields: [solutionId], references: [id], onDelete: SetNull)
+  published    Boolean   @default(true)
+  createdAt    DateTime  @default(now())
+}
+
+model Lead {
+  id        String     @id @default(cuid())
+  name      String
+  business  String
+  email     String
+  phone     String
+  industry  String?
+  type      String
+  message   String?    @db.Text
+  status    LeadStatus @default(NEW)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  eventName String
+  page      String
+  meta      Json?
+  createdAt DateTime @default(now())
+}

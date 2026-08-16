@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
 export async function POST(request: Request) {
   try {
@@ -12,17 +13,11 @@ export async function POST(request: Request) {
       );
     }
 
-    // Here you can integrate database logging (e.g., PostgreSQL/Prisma/MongoDB)
-    // or send notification emails via Resend / SendGrid / Nodemailer.
-    console.log('Received Assessment Request:', {
-      fullName,
-      email,
-      phone,
-      company,
-      serviceType,
-      projectOverview,
-      timestamp: new Date().toISOString()
-    });
+    await prisma.lead.create({ data: {
+      name: String(fullName).trim(), email: String(email).trim().toLowerCase(), phone: String(phone || '').trim(),
+      business: String(company || 'Not provided').trim(), type: String(serviceType || 'CONSULTATION'), message: String(projectOverview).trim(),
+    }});
+    await prisma.analyticsEvent.create({ data: { eventName: 'lead_submitted', page: '/', meta: { serviceType } } });
 
     return NextResponse.json(
       { 

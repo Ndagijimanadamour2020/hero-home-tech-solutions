@@ -28,6 +28,9 @@ export default function Navbar() {
             <Link href="#services" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
               Services
             </Link>
+            <Link href="#solutions" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
+              Solutions
+            </Link>
             <Link href="#portfolio" className="text-sm font-medium text-slate-300 hover:text-white transition-colors">
               Portfolio
             </Link>
@@ -73,6 +76,9 @@ export default function Navbar() {
             className="block px-3 py-2 text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg"
           >
             Portfolio
+          </Link>
+          <Link href="#solutions" onClick={() => setIsOpen(false)} className="block px-3 py-2 text-base font-medium text-slate-300 hover:text-white hover:bg-slate-800 rounded-lg">
+            Solutions
           </Link>
           <Link 
             href="#about" 

@@ -2,6 +2,25 @@
 
 Enterprise digital assessment and service platform for Hero Home Tech Solutions.
 
+## Dynamic CMS setup
+
+Published solutions, industries, demos, and case studies are read from Prisma; `/admin` manages those collections and monitors leads and recent events.
+
+Set the following before running database commands or deploying:
+
+```env
+DATABASE_URL="postgresql://..."
+ADMIN_SESSION_SECRET="use-a-long-random-value-in-production"
+```
+
+```bash
+npx prisma generate
+npx prisma db push
+npx tsx prisma/seed.ts
+```
+
+The seed preserves the existing `damour` admin account and adds initial dynamic portfolio content.
+
 ## Features
 - **Tech Stack**: Next.js 14 (App Router), TypeScript, Tailwind CSS, Lucide Icons.
 - **Conversion Focused**: Built-in "Free Digital Assessment" lead capture form with server API route (`/api/assessment`).

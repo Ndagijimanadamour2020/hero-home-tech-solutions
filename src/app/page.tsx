@@ -3,6 +3,7 @@ import Services from '@/components/Services';
 import Portfolio from '@/components/Portfolio';
 import AssessmentForm from '@/components/AssessmentForm';
 import Testimonials from '@/components/Testimonials';
+import ContentExplorer from '@/components/ContentExplorer';
 import { Cpu, Check, ShieldCheck, Zap } from 'lucide-react';
 
 export default function Home() {
@@ -10,6 +11,7 @@ export default function Home() {
     <div>
       <Hero />
       <Services />
+      <ContentExplorer />
       <Portfolio />
       
       {/* About Section */}
