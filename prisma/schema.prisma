@@ -24,10 +24,40 @@ model SiteConfig {
 enum LeadStatus {
   NEW
   CONTACTED
+  IN_DISCUSSION
   DEMO_SCHEDULED
   PROPOSAL_SENT
   WON
   LOST
+}
+
+enum ProjectStatus {
+  DRAFT
+  PUBLISHED
+}
+
+enum PriceType {
+  FIXED
+  STARTING_FROM
+  CONTACT
+  FREE_DEMO
+}
+
+enum PaymentStatus {
+  PENDING
+  COMPLETED
+  FAILED
+  CANCELLED
+  INVALID
+}
+
+enum OrderStatus {
+  PENDING_PAYMENT
+  PAID
+  PROCESSING
+  DELIVERED
+  CANCELLED
+  REFUNDED
 }
 
 model Solution {
@@ -95,11 +125,78 @@ model Lead {
   email     String
   phone     String
   industry  String?
+  projectId String?
+  project   Project?   @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  budget    String?
   type      String
   message   String?    @db.Text
   status    LeadStatus @default(NEW)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
+}
+
+model Category {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  slug      String    @unique
+  createdAt DateTime  @default(now())
+  projects  Project[]
+}
+
+model Project {
+  id               String        @id @default(cuid())
+  title            String
+  slug             String        @unique
+  shortDescription String        @db.Text
+  description      String        @db.Text
+  categoryId       String
+  category         Category      @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  client           String?
+  technologies     String[]
+  features         String[]
+  price            Float?
+  currency         String        @default("RWF")
+  priceType        PriceType     @default(CONTACT)
+  image            String?
+  gallery          String[]
+  liveDemoUrl      String?
+  sourceCodeUrl    String?
+  projectUrl       String?
+  status           ProjectStatus @default(DRAFT)
+  featured         Boolean       @default(false)
+  displayOrder     Int           @default(0)
+  createdAt        DateTime      @default(now())
+  updatedAt        DateTime      @updatedAt
+  leads            Lead[]
+  orders           Order[]
+  isPurchasable    Boolean       @default(false)
+  paymentCta       String        @default("Buy Now")
+
+  @@index([status, featured, displayOrder])
+}
+
+model Order {
+  id                       String        @id @default(cuid())
+  orderNumber              String        @unique
+  projectId                String
+  project                  Project       @relation(fields: [projectId], references: [id], onDelete: Restrict)
+  customerName             String
+  customerEmail            String
+  customerPhone            String
+  customerBusiness         String?
+  amount                   Float
+  currency                 String        @default("RWF")
+  pesapalMerchantReference String        @unique
+  pesapalTrackingId        String?
+  paymentMethod            String?
+  paymentStatus            PaymentStatus @default(PENDING)
+  orderStatus              OrderStatus   @default(PENDING_PAYMENT)
+  paymentUrl               String?
+  createdAt                DateTime      @default(now())
+  updatedAt                DateTime      @updatedAt
+  paidAt                   DateTime?
+
+  @@index([projectId, paymentStatus])
 }
 
 model AnalyticsEvent {

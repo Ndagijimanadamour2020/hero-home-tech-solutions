@@ -1,0 +1,1 @@
+import { redirect } from 'next/navigation'; import { isAdmin } from '@/lib/admin-auth'; import ProjectForm from '@/components/ProjectForm'; export default function NewProject(){if(!isAdmin())redirect('/admin/login');return <main className="p-6 lg:p-10"><h1 className="mb-6 text-3xl font-bold text-white">Add Project</h1><ProjectForm/></main>}

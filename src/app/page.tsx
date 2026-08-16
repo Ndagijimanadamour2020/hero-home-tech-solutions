@@ -4,7 +4,10 @@ import Portfolio from '@/components/Portfolio';
 import AssessmentForm from '@/components/AssessmentForm';
 import Testimonials from '@/components/Testimonials';
 import ContentExplorer from '@/components/ContentExplorer';
+import FeaturedProjects from '@/components/FeaturedProjects';
 import { Cpu, Check, ShieldCheck, Zap } from 'lucide-react';
+
+export const dynamic = 'force-dynamic';
 
 export default function Home() {
   return (
@@ -12,6 +15,7 @@ export default function Home() {
       <Hero />
       <Services />
       <ContentExplorer />
+      <FeaturedProjects />
       <Portfolio />
       
       {/* About Section */}

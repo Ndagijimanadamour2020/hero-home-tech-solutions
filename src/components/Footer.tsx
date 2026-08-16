@@ -40,6 +40,7 @@ export default function Footer() {
               <li><Link href="#portfolio" className="hover:text-white transition-colors">Featured Projects</Link></li>
               <li><Link href="#testimonials" className="hover:text-white transition-colors">Client Outcomes</Link></li>
               <li><Link href="#assessment" className="hover:text-white transition-colors">Request Digital Audit</Link></li>
+              <li><Link href="/admin/login" className="hover:text-white transition-colors">Admin</Link></li>
             </ul>
           </div>
 

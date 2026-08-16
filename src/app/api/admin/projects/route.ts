@@ -1,0 +1,9 @@
+export const dynamic = 'force-dynamic';
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
+import { isAdmin } from '@/lib/admin-auth';
+import { safeUrl } from '@/lib/project';
+const arrays = new Set(['technologies', 'features', 'gallery']);
+function data(body: Record<string, any>) { const cleaned: Record<string, any> = {}; for (const [key, value] of Object.entries(body)) { cleaned[key] = arrays.has(key) && typeof value === 'string' ? value.split('\n').map(v => v.trim()).filter(Boolean) : value === '' ? null : value; } if (cleaned.price !== null && cleaned.price !== undefined) cleaned.price = Number(cleaned.price); for (const field of ['liveDemoUrl', 'sourceCodeUrl', 'projectUrl']) if (cleaned[field] && !safeUrl(cleaned[field])) throw new Error(`Invalid ${field}`); return cleaned; }
+export async function GET(request: Request) { if (!isAdmin()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); const search = new URL(request.url).searchParams.get('search') || ''; return NextResponse.json(await prisma.project.findMany({ where: search ? { OR: [{ title: { contains: search, mode: 'insensitive' } }, { category: { name: { contains: search, mode: 'insensitive' } } }] } : {}, include: { category: true }, orderBy: [{ createdAt: 'desc' }] })); }
+export async function POST(request: Request) { if (!isAdmin()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); try { const body = data(await request.json()); if (!body.title || !body.slug || !body.shortDescription || !body.description || !body.categoryId) return NextResponse.json({ error: 'Title, slug, descriptions and category are required.' }, { status: 400 }); return NextResponse.json(await prisma.project.create({ data: body as any, include: { category: true } }), { status: 201 }); } catch (error) { return NextResponse.json({ error: error instanceof Error ? error.message : 'Invalid project data.' }, { status: 400 }); } }
