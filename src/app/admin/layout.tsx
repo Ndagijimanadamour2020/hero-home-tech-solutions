@@ -1,6 +1,5 @@
 import { isAdmin } from '@/lib/auth';
 import AdminSidebar from '@/components/AdminSidebar';
-import { redirect } from 'next/navigation';
 
 export default async function AdminLayout({
   children,
@@ -9,11 +8,14 @@ export default async function AdminLayout({
 }) {
   const authenticated = await isAdmin();
 
-  // Allow rendering the login page without wrapping it in the admin sidebar wrapper
   return (
-    <div className="flex min-h-screen bg-gray-100">
-      {authenticated && <AdminSidebar />}
-      <main className="flex-1 p-8">{children}</main>
+    <div className="flex h-screen w-screen overflow-hidden bg-slate-950 text-slate-100">
+      {authenticated && (
+        <aside className="w-64 flex-shrink-0 border-r border-slate-800 bg-slate-900">
+          <AdminSidebar />
+        </aside>
+      )}
+      <main className="flex-1 overflow-y-auto p-8">{children}</main>
     </div>
   );
 }

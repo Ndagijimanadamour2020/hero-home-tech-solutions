@@ -1,6 +1,42 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, FolderKanban, PlusCircle, Tags, Users, Settings, ExternalLink, LogOut, Cpu } from 'lucide-react';
-const links = [{ href: '/admin', label: 'Dashboard', icon: LayoutDashboard }, { href: '/admin/projects', label: 'Projects', icon: FolderKanban }, { href: '/admin/projects/new', label: 'Add Project', icon: PlusCircle }, { href: '/admin/categories', label: 'Categories', icon: Tags }, { href: '/admin/leads', label: 'Leads / Messages', icon: Users }, { href: '/admin/settings', label: 'Settings', icon: Settings }];
-export default function AdminSidebar() { const path = usePathname(); return <aside className="fixed inset-y-0 left-0 z-40 hidden w-64 border-r border-slate-800 bg-slate-950 p-5 lg:flex lg:flex-col"><Link href="/admin" className="flex items-center gap-2 text-white font-bold"><span className="rounded-lg bg-blue-600 p-2"><Cpu className="w-5 h-5" /></span> HERO ADMIN</Link><nav className="mt-10 space-y-1 flex-1">{links.map(({ href, label, icon: Icon }) => <Link key={href} href={href} className={`flex gap-3 rounded-xl px-3 py-3 text-sm ${path === href ? 'bg-blue-600 text-white' : 'text-slate-400 hover:bg-slate-900 hover:text-white'}`}><Icon className="w-5 h-5" />{label}</Link>)}</nav><Link href="/" className="flex gap-3 rounded-xl px-3 py-3 text-sm text-slate-400 hover:text-white"><ExternalLink className="w-5 h-5"/>View Website</Link><form action="/api/admin/logout" method="post"><button className="mt-2 flex w-full gap-3 rounded-xl px-3 py-3 text-sm text-red-300 hover:bg-red-950/40"><LogOut className="w-5 h-5"/>Logout</button></form></aside>; }
+
+export default function AdminSidebar() {
+  const pathname = usePathname();
+
+  const navItems = [
+    { label: 'Dashboard', href: '/admin' },
+    { label: 'Projects Management', href: '/admin/projects' },
+    { label: 'Digital Assessments', href: '/admin/assessments' },
+  ];
+
+  return (
+    <div className="flex flex-col h-full p-4">
+      <div className="mb-8 px-2 text-xl font-bold text-blue-400">HERO TECH ADMIN</div>
+      <nav className="flex-1 space-y-2">
+        {navItems.map((item) => (
+          <Link
+            key={item.href}
+            href={item.href}
+            className={`block rounded-lg px-4 py-2.5 text-sm font-medium transition ${
+              pathname === item.href
+                ? 'bg-blue-600 text-white'
+                : 'text-slate-400 hover:bg-slate-800 hover:text-white'
+            }`}
+          >
+            {item.label}
+          </Link>
+        ))}
+      </nav>
+      <form action="/api/admin/logout" method="POST" className="pt-4 border-t border-slate-800">
+        <button
+          type="submit"
+          className="w-full rounded-lg bg-red-900/30 px-4 py-2 text-left text-sm font-medium text-red-400 hover:bg-red-900/50"
+        >
+          Sign Out
+        </button>
+      </form>
+    </div>
+  );
+}
