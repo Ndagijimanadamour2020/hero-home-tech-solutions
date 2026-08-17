@@ -1,3 +1,5 @@
+// src/app/admin/layout.tsx
+
 import { isAdmin } from '@/lib/auth';
 import AdminSidebar from '@/components/AdminSidebar';
 

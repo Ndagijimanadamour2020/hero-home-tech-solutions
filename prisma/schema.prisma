@@ -53,6 +53,13 @@ enum OrderStatus {
   REFUNDED
 }
 
+enum SectionType {
+  SERVICES
+  SOLUTIONS
+  PORTFOLIO
+  ABOUT
+}
+
 model User {
   id               String    @id @default(cuid())
   username         String    @unique
@@ -69,6 +76,18 @@ model User {
 model SiteConfig {
   id      String @id @default(cuid())
   logoUrl String
+}
+
+model SectionContent {
+  id          String      @id @default(cuid())
+  type        SectionType @unique
+  title       String
+  subtitle    String?
+  description String      @db.Text
+  content     Json?
+  published   Boolean     @default(true)
+  updatedAt   DateTime    @updatedAt
+  createdAt   DateTime    @default(now())
 }
 
 model Solution {
@@ -143,6 +162,9 @@ model Project {
   id               String        @id @default(cuid())
   title            String
   slug             String        @unique
+  problem          String        @db.Text
+  solution         String        @db.Text
+  benefits         String        @db.Text
   shortDescription String        @db.Text
   description      String        @db.Text
   categoryId       String
@@ -150,18 +172,19 @@ model Project {
   client           String?
   technologies     String[]
   features         String[]
-  price            Float?
-  currency         String        @default("RWF")
-  priceType        PriceType     @default(CONTACT)
+  price            Float
+  currency         String        @default("USD")
+  priceType        PriceType     @default(FIXED)
   image            String?
-  gallery          String[]
+  images           String[]      // At least 3 project images for preview slider
+  downloadFolder   String?       // Download URL / cloud folder link unlocked after payment
   liveDemoUrl      String?
   sourceCodeUrl    String?
   projectUrl       String?
   status           ProjectStatus @default(DRAFT)
   featured         Boolean       @default(false)
   displayOrder     Int           @default(0)
-  isPurchasable    Boolean       @default(false)
+  isPurchasable    Boolean       @default(true)
   paymentCta       String        @default("Buy Now")
   createdAt        DateTime      @default(now())
   updatedAt        DateTime      @updatedAt
@@ -201,7 +224,7 @@ model Order {
   customerPhone            String
   customerBusiness         String?
   amount                   Float
-  currency                 String        @default("RWF")
+  currency                 String        @default("USD")
   pesapalMerchantReference String        @unique
   pesapalTrackingId        String?
   paymentMethod            String?
