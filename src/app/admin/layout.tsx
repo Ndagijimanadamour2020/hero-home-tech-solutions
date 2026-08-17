@@ -1,3 +1,19 @@
 import { isAdmin } from '@/lib/auth';
 import AdminSidebar from '@/components/AdminSidebar';
-export default function AdminLayout({ children }: { children: React.ReactNode }) { return isAdmin() ? <div className="bg-slate-950 min-h-screen"><AdminSidebar /><div className="lg:ml-64">{children}</div></div> : children; }
+import { redirect } from 'next/navigation';
+
+export default async function AdminLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const authenticated = await isAdmin();
+
+  // Allow rendering the login page without wrapping it in the admin sidebar wrapper
+  return (
+    <div className="flex min-h-screen bg-gray-100">
+      {authenticated && <AdminSidebar />}
+      <main className="flex-1 p-8">{children}</main>
+    </div>
+  );
+}

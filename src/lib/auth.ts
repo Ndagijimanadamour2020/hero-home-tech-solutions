@@ -1,4 +1,5 @@
 import { jwtVerify, SignJWT } from 'jose';
+import { cookies } from 'next/headers';
 
 export async function verifyJwtToken(token: string) {
   try {
@@ -17,4 +18,13 @@ export async function signJwtToken(payload: Record<string, unknown>) {
     .setIssuedAt()
     .setExpirationTime('1d')
     .sign(secret);
+}
+
+export async function isAdmin() {
+  const cookieStore = cookies();
+  const token = cookieStore.get('admin_token')?.value;
+  if (!token) return false;
+  
+  const payload = await verifyJwtToken(token);
+  return !!payload;
 }
