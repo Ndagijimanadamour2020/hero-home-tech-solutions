@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { isAdmin } from '@/lib/admin-auth';
+import { isAdmin } from '@/lib/auth';
 const slugify = (value: string) => value.toLowerCase().trim().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
 export async function GET() { if (!isAdmin()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); return NextResponse.json(await prisma.category.findMany({ include: { _count: { select: { projects: true } } }, orderBy: { name: 'asc' } })); }
 export async function POST(request: Request) { if (!isAdmin()) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 }); const { name } = await request.json(); if (!name) return NextResponse.json({ error: 'Name is required.' }, { status: 400 }); return NextResponse.json(await prisma.category.create({ data: { name: String(name).trim(), slug: slugify(name) } }), { status: 201 }); }

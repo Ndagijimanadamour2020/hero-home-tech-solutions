@@ -2,7 +2,7 @@ export const dynamic = 'force-dynamic';
 
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { isAdmin } from '@/lib/admin-auth';
+import { isAdmin } from '@/lib/auth';
 
 const models: Record<string, any> = { solutions: prisma.solution, industries: prisma.industry, demos: prisma.demo, caseStudies: prisma.caseStudy, leads: prisma.lead };
 const listFields = new Set(['features', 'benefits', 'useCases', 'technologies', 'impact']);

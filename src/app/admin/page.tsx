@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 
 import { redirect } from 'next/navigation';
-import { isAdmin } from '@/lib/admin-auth';
+import { isAdmin } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import AdminCMS from '@/components/AdminCMS';
 

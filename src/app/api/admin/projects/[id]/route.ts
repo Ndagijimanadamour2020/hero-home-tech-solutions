@@ -1,7 +1,7 @@
 export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
-import { isAdmin } from '@/lib/admin-auth';
+import { isAdmin } from '@/lib/auth';
 import { safeUrl } from '@/lib/project';
 const arrays = new Set(['technologies', 'features', 'gallery']);
 function clean(body: Record<string, any>) { const data: Record<string, any> = {}; for (const [key, value] of Object.entries(body)) data[key] = arrays.has(key) && typeof value === 'string' ? value.split('\n').map(v => v.trim()).filter(Boolean) : value === '' ? null : value; if (data.price !== null && data.price !== undefined) data.price = Number(data.price); for (const field of ['liveDemoUrl', 'sourceCodeUrl', 'projectUrl']) if (data[field] && !safeUrl(data[field])) throw new Error(`Invalid ${field}`); return data; }

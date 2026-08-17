@@ -3,7 +3,7 @@ export const dynamic = 'force-dynamic';
 import { NextResponse } from 'next/server';
 import bcrypt from 'bcryptjs';
 import { prisma } from '@/lib/prisma';
-import { cookieName, sessionValue } from '@/lib/admin-auth';
+import { cookieName, sessionValue } from '@/lib/auth';
 
 export async function POST(request: Request) {
   const { username, password } = await request.json();
