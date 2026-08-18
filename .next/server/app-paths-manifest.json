@@ -1,10 +1,1 @@
-{
-  "/page": "app/page.js",
-  "/api/admin/sections/route": "app/api/admin/sections/route.js",
-  "/api/admin/categories/route": "app/api/admin/categories/route.js",
-  "/admin/login/page": "app/admin/login/page.js",
-  "/admin/page": "app/admin/page.js",
-  "/admin/projects/new/page": "app/admin/projects/new/page.js",
-  "/admin/projects/page": "app/admin/projects/page.js",
-  "/admin/sections/page": "app/admin/sections/page.js"
-}
+{}
