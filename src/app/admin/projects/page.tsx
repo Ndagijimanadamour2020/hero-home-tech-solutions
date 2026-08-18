@@ -58,7 +58,7 @@ export default async function AdminProjects() {
                 </td>
                 <td className="px-4 py-3 text-right space-x-2">
                   <Link
-                    href={`/admin/projects/${p.id}`}
+                    href={`/admin/projects/${p.id}/edit`}
                     className="text-xs font-semibold text-blue-400 hover:underline"
                   >
                     Edit
