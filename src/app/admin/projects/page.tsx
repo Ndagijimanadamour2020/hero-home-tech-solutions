@@ -50,7 +50,7 @@ export default async function AdminProjects() {
                     className={`inline-block rounded px-2 py-1 text-xs font-semibold ${
                       p.status === 'PUBLISHED'
                         ? 'bg-emerald-500/10 text-emerald-400'
-                        : 'bg-amber-500/10 text-amber-400'
+                        : 'bg-amber500/10 text-amber-400'
                     }`}
                   >
                     {p.status || 'DRAFT'}
