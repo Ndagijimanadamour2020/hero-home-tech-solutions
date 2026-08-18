@@ -1,7 +1,13 @@
+'use client';
+
 import Link from 'next/link';
-import { Cpu, Mail, Phone, MapPin, Linkedin, Github, Globe } from 'lucide-react';
+import { Mail, MapPin, Linkedin, Github } from 'lucide-react';
+import BrandLogo from '@/components/BrandLogo';
+import { useBranding } from '@/components/BrandingProvider';
 
 export default function Footer() {
+  const { siteName } = useBranding();
+
   return (
     <footer className="bg-slate-950 border-t border-slate-800 text-slate-400 text-sm pt-16 pb-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -9,10 +15,7 @@ export default function Footer() {
           
           <div className="md:col-span-1">
             <Link href="/" className="flex items-center gap-2 mb-4">
-              <div className="p-2 rounded-lg bg-blue-600 text-white">
-                <Cpu className="w-5 h-5" />
-              </div>
-              <span className="text-lg font-bold text-white tracking-tight">HERO HOME TECH</span>
+              <BrandLogo size="sm" showTagline={false} />
             </Link>
             <p className="text-xs text-slate-400 leading-relaxed mb-4">
               Your trusted enterprise technology partner specializing in custom full-stack web platforms, AI solutions, and digital transformation.
@@ -69,7 +72,7 @@ export default function Footer() {
         </div>
 
         <div className="pt-8 border-t border-slate-900 flex flex-col sm:flex-row justify-between items-center text-xs text-slate-500">
-          <p>© {new Date().getFullYear()} Hero Home Tech Solutions. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} {siteName}. All rights reserved.</p>
           <p className="mt-2 sm:mt-0">Engineered with Next.js, TypeScript & Tailwind CSS</p>
         </div>
       </div>

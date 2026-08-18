@@ -1,1 +1,22 @@
-export const dynamic = 'force-dynamic'; import { redirect } from 'next/navigation'; import { isAdmin } from '@/lib/auth'; export default function Settings(){if(!isAdmin())redirect('/admin/login');return <main className="p-6 lg:p-10"><h1 className="text-3xl font-bold text-white">Settings</h1><div className="mt-6 max-w-xl rounded-2xl border border-slate-800 bg-slate-900 p-6"><h2 className="font-bold text-white">Admin account</h2><p className="mt-2 text-sm text-slate-400">For security, update administrator credentials through the protected database/seed configuration until a dedicated account-management flow is configured.</p></div></main>}
+export const dynamic = 'force-dynamic';
+
+import { redirect } from 'next/navigation';
+import { isAdmin } from '@/lib/auth';
+import { getBranding } from '@/lib/settings';
+import SettingsForm from './SettingsForm';
+
+export default async function Settings() {
+  if (!(await isAdmin())) redirect('/admin/login');
+
+  const branding = await getBranding();
+
+  return (
+    <main className="p-6 lg:p-10">
+      <h1 className="text-3xl font-bold text-white">Settings</h1>
+      <p className="mt-2 text-sm text-slate-400">
+        Branding updates apply instantly across the public site, the admin console and the browser tab icon.
+      </p>
+      <SettingsForm branding={branding} />
+    </main>
+  );
+}

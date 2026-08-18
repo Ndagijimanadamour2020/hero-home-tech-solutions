@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import ImageDropzone from '@/components/admin/ImageDropzone';
+import { uploadFiles } from '@/lib/client-upload';
 
 interface CategoryOption {
   id: string;
@@ -13,25 +15,10 @@ const CURRENCIES = ['RWF', 'USD', 'EUR'];
 const inputClass =
   'w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-blue-500 outline-none';
 
-async function uploadFiles(files: File[], kind: 'image' | 'archive'): Promise<string[]> {
-  const payload = new FormData();
-  payload.append('kind', kind);
-  files.forEach((file) => payload.append('files', file));
-
-  const res = await fetch('/api/admin/upload', { method: 'POST', body: payload });
-  const data = await res.json();
-
-  if (!res.ok) {
-    throw new Error(data.error || 'Upload failed.');
-  }
-
-  return Array.isArray(data.urls) ? data.urls : [];
-}
-
 export default function NewProjectPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
-  const [uploading, setUploading] = useState<'image' | 'archive' | null>(null);
+  const [uploading, setUploading] = useState<'archive' | null>(null);
   const [error, setError] = useState('');
   const [categories, setCategories] = useState<CategoryOption[]>([]);
   const [imageUrls, setImageUrls] = useState<string[]>([]);
@@ -60,23 +47,6 @@ export default function NewProjectPage() {
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const files = Array.from(e.target.files || []);
-    if (!files.length) return;
-
-    setError('');
-    setUploading('image');
-    try {
-      const urls = await uploadFiles(files, 'image');
-      setImageUrls((current) => [...current, ...urls]);
-    } catch (err: any) {
-      setError(err.message);
-    } finally {
-      setUploading(null);
-      e.target.value = '';
-    }
   };
 
   const handleZipUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -195,20 +165,8 @@ export default function NewProjectPage() {
         </div>
 
         <div>
-          <label className="block text-xs font-semibold mb-1 text-slate-300">Project Images (select multiple for the 3D carousel)</label>
-          <input type="file" accept="image/*" multiple onChange={handleImageUpload} disabled={uploading !== null} className="w-full text-sm text-slate-400 file:mr-3 file:rounded-lg file:border-0 file:bg-blue-600 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-blue-500 disabled:opacity-50" />
-          {uploading === 'image' && <p className="mt-2 text-xs text-slate-400">Uploading images...</p>}
-          {imageUrls.length > 0 && (
-            <div className="mt-3 grid grid-cols-2 gap-3 md:grid-cols-4">
-              {imageUrls.map((url) => (
-                <div key={url} className="relative overflow-hidden rounded-lg border border-slate-800">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={url} alt="Uploaded project preview" className="h-24 w-full object-cover" />
-                  <button type="button" onClick={() => setImageUrls((current) => current.filter((item) => item !== url))} className="absolute right-1 top-1 rounded bg-slate-950/80 px-2 py-1 text-xs font-semibold text-rose-400">Remove</button>
-                </div>
-              ))}
-            </div>
-          )}
+          <label className="block text-xs font-semibold mb-1 text-slate-300">Project Images (drag & drop multiple files for the carousel)</label>
+          <ImageDropzone urls={imageUrls} onChange={setImageUrls} onError={setError} disabled={uploading !== null} />
         </div>
 
         <button type="submit" disabled={loading || uploading !== null} className="w-full bg-blue-600 hover:bg-blue-500 text-white font-semibold py-2.5 rounded-lg transition-colors disabled:opacity-50">

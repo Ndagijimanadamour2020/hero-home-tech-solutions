@@ -1,19 +1,41 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { useBranding } from '@/components/BrandingProvider';
 
 export default function AdminSidebar() {
   const pathname = usePathname();
+  const { siteName, logoUrl, adminAvatarUrl } = useBranding();
 
   const navItems = [
     { label: 'Dashboard', href: '/admin' },
     { label: 'Projects Management', href: '/admin/projects' },
+    { label: 'Categories', href: '/admin/categories' },
     { label: 'Digital Assessments', href: '/admin/assessments' },
+    { label: 'Settings', href: '/admin/settings' },
   ];
 
   return (
     <div className="flex flex-col h-full p-4">
-      <div className="mb-8 px-2 text-xl font-bold text-blue-400">HERO TECH ADMIN</div>
+      <div className="mb-8 flex items-center gap-3 px-2">
+        {logoUrl ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={logoUrl} alt={siteName} className="h-10 w-10 rounded-lg bg-slate-900 object-contain p-1" />
+        ) : (
+          <span className="grid h-10 w-10 place-items-center rounded-lg bg-blue-600 text-sm font-bold text-white">
+            {siteName.charAt(0)}
+          </span>
+        )}
+        <span className="text-sm font-bold uppercase tracking-wide text-blue-400">{siteName}</span>
+      </div>
+
+      {adminAvatarUrl && (
+        <div className="mb-6 flex items-center gap-3 rounded-lg border border-slate-800 bg-slate-900/60 px-3 py-2">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={adminAvatarUrl} alt="Administrator" className="h-9 w-9 rounded-full object-cover" />
+          <span className="text-xs font-semibold text-slate-300">Signed in as administrator</span>
+        </div>
+      )}
       <nav className="flex-1 space-y-2">
         {navItems.map((item) => (
           <Link

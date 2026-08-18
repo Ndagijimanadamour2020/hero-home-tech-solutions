@@ -3,7 +3,8 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, Cpu, ArrowRight } from 'lucide-react';
+import { Menu, X, ArrowRight } from 'lucide-react';
+import BrandLogo from '@/components/BrandLogo';
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -19,17 +20,7 @@ export default function Navbar() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-20 items-center justify-between">
           <Link href="/" className="group flex items-center gap-3">
-            <div className="rounded-xl bg-gradient-to-br from-blue-600 to-indigo-600 p-2.5 text-white shadow-lg shadow-blue-500/20 transition-transform group-hover:scale-105">
-              <Cpu className="h-6 w-6" />
-            </div>
-            <div>
-              <span className="block text-xl font-bold leading-none tracking-tight text-white">
-                HERO HOME TECH
-              </span>
-              <span className="text-xs font-semibold uppercase tracking-widest text-blue-400">
-                Solutions
-              </span>
-            </div>
+            <BrandLogo />
           </Link>
 
           <div className="hidden items-center gap-8 md:flex">
@@ -39,8 +30,8 @@ export default function Navbar() {
             <Link href="#solutions" className="text-sm font-medium text-slate-300 transition-colors hover:text-white">
               Solutions
             </Link>
-            <Link href="#portfolio" className="text-sm font-medium text-slate-300 transition-colors hover:text-white">
-              Portfolio
+            <Link href="/projects" className="text-sm font-medium text-slate-300 transition-colors hover:text-white">
+              Products
             </Link>
             <Link href="#about" className="text-sm font-medium text-slate-300 transition-colors hover:text-white">
               About
