@@ -1,9 +1,16 @@
-import { PriceType } from '@prisma/client';
-
-export function projectPrice(project: { price: { toString(): string } | null; currency: string; priceType: PriceType }) {
-  if (project.priceType === 'CONTACT') return 'Contact us for pricing';
-  if (project.priceType === 'FREE_DEMO') return 'Free demo';
-  const amount = project.price ? Number(project.price.toString()).toLocaleString() : '—';
-  return `${project.priceType === 'STARTING_FROM' ? 'Starting from ' : ''}${project.currency} ${amount}`;
+export function projectPrice(project: any): string {
+  if (!project) return 'Contact for Quote';
+  if (project.price && project.price > 0) {
+    return `$${project.price.toLocaleString()}`;
+  }
+  if (project.projectPrice) {
+    return project.projectPrice;
+  }
+  return 'Contact for Pricing';
 }
-export function safeUrl(value?: string | null) { if (!value) return null; try { const url = new URL(value); return ['http:', 'https:'].includes(url.protocol) ? url.toString() : null; } catch { return null; } }
+
+export function safeUrl(url?: string | null): string | null {
+  if (!url) return null;
+  if (url.startsWith('http://') || url.startsWith('https://')) return url;
+  return `https://${url}`;
+}
