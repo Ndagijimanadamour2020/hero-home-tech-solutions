@@ -25,10 +25,10 @@ export default async function FeaturedProjects() {
                   {p.category?.name || 'General Project'}
                 </span>
                 <h3 className="text-xl font-bold text-white mt-2">
-                  {p.projectName || p.title || 'Untitled Project'}
+                  {p.title || 'Untitled Project'}
                 </h3>
                 <p className="text-slate-400 text-sm mt-2 line-clamp-3">
-                  {p.projectProblem || p.description || 'No description provided.'}
+                  {p.shortDescription || p.description || 'No description provided.'}
                 </p>
               </div>
               <div className="mt-6 flex items-center justify-between">

@@ -31,7 +31,7 @@ export default async function Projects() {
                 {p.image && (
                   <img
                     src={p.image}
-                    alt={p.projectName || p.title || 'Project preview'}
+                    alt={p.title || 'Project preview'}
                     className="h-44 w-full object-cover"
                   />
                 )}
@@ -40,11 +40,11 @@ export default async function Projects() {
                     {p.category?.name || 'General Project'}
                   </p>
                   <h2 className="mt-2 text-xl font-bold text-white">
-                    {p.projectName || p.title}
+                    {p.title}
                   </h2>
-                  {(p.shortDescription || p.projectProblem || p.problem) && (
+                  {(p.shortDescription || p.problem) && (
                     <p className="mt-3 text-sm text-slate-400 line-clamp-3">
-                      {p.shortDescription || p.projectProblem || p.problem}
+                      {p.shortDescription || p.problem}
                     </p>
                   )}
                 </div>

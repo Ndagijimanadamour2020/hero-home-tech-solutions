@@ -39,6 +39,13 @@ export async function POST(req: Request) {
       );
     }
 
+    if (!categoryId) {
+      return NextResponse.json(
+        { error: 'A category is required for this project.' },
+        { status: 400 }
+      );
+    }
+
     const generatedSlug = name
       .toLowerCase()
       .replace(/[^a-z0-9]+/g, '-')
@@ -50,27 +57,20 @@ export async function POST(req: Request) {
 
     const project = await prisma.project.create({
       data: {
-        // Required schema fields
-        projectName: name,
         title: name,
         slug: generatedSlug,
-        projectProblem: prob,
-        projectSolution: sol,
-        projectBenefits: ben,
-        
-        // Optional / Legacy fields
         problem: prob,
         solution: sol,
         benefits: ben,
-        shortDescription: shortDescription || null,
-        description: description || null,
-        categoryId: categoryId || null,
+        shortDescription: String(shortDescription || prob),
+        description: String(description || sol),
+        categoryId: String(categoryId),
         status: status || 'DRAFT',
         featured: Boolean(featured),
         price: parseFloat(price) || 0,
         liveDemoUrl: liveDemoUrl || null,
         projectUrl: projectUrl || null,
-        projectZipUrl: projectZipUrl || null,
+        downloadFolder: projectZipUrl || null,
         images: imageArray,
       },
     });

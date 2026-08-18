@@ -37,7 +37,7 @@ export default async function AdminProjects() {
             {projects.map((p) => (
               <tr key={p.id} className="hover:bg-slate-800/40">
                 <td className="px-4 py-3 font-semibold text-white">
-                  {p.projectName || p.title || 'Untitled Project'}
+                  {p.title || 'Untitled Project'}
                 </td>
                 <td className="px-4 py-3 text-slate-400">
                   {p.category?.name || 'Unassigned'}

@@ -15,11 +15,21 @@ export async function POST(req: Request) {
       liveDemoUrl,
       images,
       projectZipUrl,
+      categoryId,
+      shortDescription,
+      description,
     } = body;
 
     if (!projectName || !projectProblem || !projectSolution || !projectBenefits) {
       return NextResponse.json(
         { error: 'Please provide project name, problem, solution, and benefits.' },
+        { status: 400 }
+      );
+    }
+
+    if (!categoryId) {
+      return NextResponse.json(
+        { error: 'Please select a category for this project.' },
         { status: 400 }
       );
     }
@@ -36,20 +46,19 @@ export async function POST(req: Request) {
 
     const project = await prisma.project.create({
       data: {
-        projectName: name,
         title: name,
         slug: generatedSlug,
-        projectProblem: String(projectProblem),
-        projectSolution: String(projectSolution),
-        projectBenefits: String(projectBenefits),
         problem: String(projectProblem),
         solution: String(projectSolution),
         benefits: String(projectBenefits),
+        shortDescription: String(shortDescription || projectProblem),
+        description: String(description || projectSolution),
+        categoryId: String(categoryId),
         projectUrl: projectUrl || null,
         price: parseFloat(price) || 0,
         liveDemoUrl: liveDemoUrl || null,
         images: imageArray,
-        projectZipUrl: projectZipUrl || null,
+        downloadFolder: projectZipUrl || null,
       },
     });
 

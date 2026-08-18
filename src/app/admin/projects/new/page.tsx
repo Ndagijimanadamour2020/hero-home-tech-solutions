@@ -1,12 +1,18 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+
+interface CategoryOption {
+  id: string;
+  name: string;
+}
 
 export default function NewProjectPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [categories, setCategories] = useState<CategoryOption[]>([]);
 
   const [formData, setFormData] = useState({
     projectName: '',
@@ -18,9 +24,19 @@ export default function NewProjectPage() {
     liveDemoUrl: '',
     images: '',
     projectZipUrl: '',
+    categoryId: '',
   });
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  useEffect(() => {
+    fetch('/api/admin/categories')
+      .then((res) => (res.ok ? res.json() : []))
+      .then((data) => setCategories(Array.isArray(data) ? data : []))
+      .catch(() => setCategories([]));
+  }, []);
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
@@ -61,6 +77,15 @@ export default function NewProjectPage() {
           <div>
             <label className="block text-xs font-semibold mb-1 text-slate-300">Project Name *</label>
             <input name="projectName" required value={formData.projectName} onChange={handleChange} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-blue-500 outline-none" placeholder="e.g. AgriVision AI" />
+          </div>
+          <div>
+            <label className="block text-xs font-semibold mb-1 text-slate-300">Category *</label>
+            <select name="categoryId" required value={formData.categoryId} onChange={handleChange} className="w-full bg-slate-950 border border-slate-800 rounded-lg px-3 py-2 text-sm focus:border-blue-500 outline-none">
+              <option value="">Select a category</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>{category.name}</option>
+              ))}
+            </select>
           </div>
           <div>
             <label className="block text-xs font-semibold mb-1 text-slate-300">Price (RWF / USD)</label>

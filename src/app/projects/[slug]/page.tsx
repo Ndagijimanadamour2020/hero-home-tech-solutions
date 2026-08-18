@@ -25,31 +25,31 @@ export default async function ProjectDetailPage({ params }: Props) {
           {project.category?.name || 'Unassigned Category'}
         </span>
         <h1 className="text-4xl font-extrabold mt-2">
-          {project.projectName || project.title}
+          {project.title}
         </h1>
         <p className="text-emerald-400 text-xl font-semibold mt-4">
           {projectPrice(project)}
         </p>
 
         <div className="mt-8 space-y-6 text-slate-300">
-          {project.projectProblem && (
+          {project.problem && (
             <div>
               <h2 className="text-xl font-bold text-white">The Challenge</h2>
-              <p className="mt-2">{project.projectProblem}</p>
+              <p className="mt-2">{project.problem}</p>
             </div>
           )}
 
-          {project.projectSolution && (
+          {project.solution && (
             <div>
               <h2 className="text-xl font-bold text-white">The Solution</h2>
-              <p className="mt-2">{project.projectSolution}</p>
+              <p className="mt-2">{project.solution}</p>
             </div>
           )}
 
-          {project.projectBenefits && (
+          {project.benefits && (
             <div>
               <h2 className="text-xl font-bold text-white">Key Benefits</h2>
-              <p className="mt-2">{project.projectBenefits}</p>
+              <p className="mt-2">{project.benefits}</p>
             </div>
           )}
         </div>
