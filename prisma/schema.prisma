@@ -160,24 +160,29 @@ model Category {
 
 model Project {
   id               String        @id @default(cuid())
+  projectName      String        // Renamed/added for admin direct name reference
   title            String
   slug             String        @unique
-  problem          String        @db.Text
-  solution         String        @db.Text
-  benefits         String        @db.Text
-  shortDescription String        @db.Text
-  description      String        @db.Text
-  categoryId       String
-  category         Category      @relation(fields: [categoryId], references: [id], onDelete: Restrict)
+  projectProblem   String        @db.Text
+  projectSolution  String        @db.Text
+  projectBenefits  String        @db.Text
+  problem          String?       @db.Text
+  solution         String?       @db.Text
+  benefits         String?       @db.Text
+  shortDescription String?       @db.Text
+  description      String?       @db.Text
+  categoryId       String?
+  category         Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
   client           String?
   technologies     String[]
   features         String[]
-  price            Float
+  price            Float         @default(0)
   currency         String        @default("USD")
   priceType        PriceType     @default(FIXED)
   image            String?
-  images           String[]      // At least 3 project images for preview slider
-  downloadFolder   String?       // Download URL / cloud folder link unlocked after payment
+  images           String[]      // At least 5 image URLs for the visitor 3D rotating showcase
+  downloadFolder   String?       // Deprecated / optional alternative
+  projectZipUrl    String?       // Direct download URL for the client project .zip file
   liveDemoUrl      String?
   sourceCodeUrl    String?
   projectUrl       String?
