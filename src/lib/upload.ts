@@ -1,6 +1,28 @@
-import { createHash } from 'crypto';
+import { createHash, randomUUID } from 'crypto';
+import { mkdir, writeFile } from 'fs/promises';
+import path from 'path';
 
 export type UploadResourceType = 'image' | 'raw';
+
+function isCloudinaryConfigured(): boolean {
+  return Boolean(
+    process.env.CLOUDINARY_CLOUD_NAME &&
+      process.env.CLOUDINARY_API_KEY &&
+      process.env.CLOUDINARY_API_SECRET
+  );
+}
+
+/** Development-only fallback so uploads work locally before Cloudinary is configured. */
+async function saveToPublicFolder(file: File): Promise<string> {
+  const directory = path.join(process.cwd(), 'public', 'uploads');
+  await mkdir(directory, { recursive: true });
+
+  const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, '-');
+  const fileName = `${randomUUID()}-${safeName}`;
+  await writeFile(path.join(directory, fileName), Buffer.from(await file.arrayBuffer()));
+
+  return `/uploads/${fileName}`;
+}
 
 interface CloudinaryConfig {
   cloudName: string;
@@ -38,6 +60,10 @@ function signParams(params: Record<string, string>, apiSecret: string) {
 }
 
 export async function uploadFile(file: File, resourceType: UploadResourceType): Promise<string> {
+  if (!isCloudinaryConfigured() && process.env.NODE_ENV !== 'production') {
+    return saveToPublicFolder(file);
+  }
+
   const { cloudName, apiKey, apiSecret, folder } = readConfig();
 
   const signedParams: Record<string, string> = {
