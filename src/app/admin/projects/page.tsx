@@ -1,58 +1,66 @@
 export const dynamic = 'force-dynamic';
 
 import Link from 'next/link';
-import { redirect } from 'next/navigation';
-import { isAdmin } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { projectPrice } from '@/lib/project';
 
-export default async function Projects() {
-  if (!isAdmin()) redirect('/admin/login');
-
+export default async function AdminProjects() {
   const projects = await prisma.project.findMany({
     include: { category: true },
     orderBy: { createdAt: 'desc' },
   });
 
   return (
-    <main className="p-6 lg:p-10">
-      <div className="flex justify-between items-center">
-        <h1 className="text-3xl font-bold text-white">Projects</h1>
+    <div className="p-6">
+      <div className="flex items-center justify-between mb-6">
+        <h1 className="text-2xl font-bold text-white">Manage Projects</h1>
         <Link
           href="/admin/projects/new"
-          className="rounded-xl bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-500 transition-colors"
+          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-semibold text-white hover:bg-blue-500"
         >
-          Add Project
+          + Add New Project
         </Link>
       </div>
 
-      <div className="mt-6 overflow-x-auto rounded-xl border border-slate-800">
-        <table className="w-full text-left text-sm">
-          <thead className="bg-slate-900 text-slate-400">
+      <div className="overflow-x-auto rounded-xl border border-slate-800 bg-slate-900">
+        <table className="w-full text-left text-sm text-slate-300">
+          <thead className="bg-slate-800/60 text-xs uppercase text-slate-400">
             <tr>
-              <th className="p-4">Project</th>
-              <th className="p-4">Category</th>
-              <th className="p-4">Price</th>
-              <th className="p-4">Status</th>
-              <th className="p-4">Featured</th>
-              <th className="p-4">Actions</th>
+              <th className="px-4 py-3">Project Title</th>
+              <th className="px-4 py-3">Category</th>
+              <th className="px-4 py-3">Price</th>
+              <th className="px-4 py-3">Status</th>
+              <th className="px-4 py-3 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody className="divide-y divide-slate-800">
             {projects.map((p) => (
-              <tr key={p.id} className="border-t border-slate-800 text-slate-300">
-                <td className="p-4 font-semibold text-white">
+              <tr key={p.id} className="hover:bg-slate-800/40">
+                <td className="px-4 py-3 font-semibold text-white">
                   {p.projectName || p.title || 'Untitled Project'}
                 </td>
-                <td className="p-4">{p.category?.name || 'Uncategorized'}</td>
-                <td className="p-4">{projectPrice(p)}</td>
-                <td className="p-4">{p.status}</td>
-                <td className="p-4">{p.featured ? 'Yes' : 'No'}</td>
-                <td className="p-4">
-                  <Link href={`/projects/${p.slug}`} className="mr-3 text-blue-400 hover:underline">
-                    View
-                  </Link>
-                  <Link href={`/admin/projects/${p.id}/edit`} className="text-blue-400 hover:underline">
+                <td className="px-4 py-3 text-slate-400">
+                  {p.category?.name || 'Unassigned'}
+                </td>
+                <td className="px-4 py-3 text-emerald-400 font-medium">
+                  {projectPrice(p)}
+                </td>
+                <td className="px-4 py-3">
+                  <span
+                    className={`inline-block rounded px-2 py-1 text-xs font-semibold ${
+                      p.status === 'PUBLISHED'
+                        ? 'bg-emerald-500/10 text-emerald-400'
+                        : 'bg-amber-500/10 text-amber-400'
+                    }`}
+                  >
+                    {p.status || 'DRAFT'}
+                  </span>
+                </td>
+                <td className="px-4 py-3 text-right space-x-2">
+                  <Link
+                    href={`/admin/projects/${p.id}`}
+                    className="text-xs font-semibold text-blue-400 hover:underline"
+                  >
                     Edit
                   </Link>
                 </td>
@@ -62,9 +70,11 @@ export default async function Projects() {
         </table>
 
         {!projects.length && (
-          <p className="p-6 text-center text-slate-400">No projects found. Create your first project.</p>
+          <div className="p-6 text-center text-slate-400">
+            No projects created yet.
+          </div>
         )}
       </div>
-    </main>
+    </div>
   );
 }
