@@ -1,7 +1,10 @@
 export function projectPrice(project: any): string {
   if (!project) return 'Contact for Quote';
   if (project.price && project.price > 0) {
-    return `$${project.price.toLocaleString()}`;
+    const currency = project.currency || 'USD';
+    return currency === 'USD'
+      ? `$${project.price.toLocaleString()}`
+      : `${currency} ${project.price.toLocaleString()}`;
   }
   if (project.projectPrice) {
     return project.projectPrice;

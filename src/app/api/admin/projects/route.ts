@@ -1,7 +1,39 @@
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { isAdmin } from '@/lib/auth';
+
+const SUPPORTED_CURRENCIES = ['RWF', 'USD', 'EUR'] as const;
+
+type SupportedCurrency = (typeof SUPPORTED_CURRENCIES)[number];
+
+function toText(value: unknown): string {
+  if (Array.isArray(value)) {
+    return value.map((entry) => String(entry).trim()).filter(Boolean).join('\n');
+  }
+  return value === null || value === undefined ? '' : String(value).trim();
+}
+
+function toUrlList(value: unknown): string[] {
+  if (Array.isArray(value)) {
+    return value.map((entry) => String(entry).trim()).filter(Boolean);
+  }
+  return toText(value).split('\n').map((entry) => entry.trim()).filter(Boolean);
+}
+
+function toCurrency(value: unknown): SupportedCurrency {
+  const currency = toText(value).toUpperCase();
+  return SUPPORTED_CURRENCIES.includes(currency as SupportedCurrency)
+    ? (currency as SupportedCurrency)
+    : 'RWF';
+}
 
 export async function POST(req: Request) {
+  if (!(await isAdmin())) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await req.json();
 
@@ -16,6 +48,7 @@ export async function POST(req: Request) {
       projectBenefits,
       projectUrl,
       price,
+      currency,
       liveDemoUrl,
       images,
       projectZipUrl,
@@ -27,12 +60,12 @@ export async function POST(req: Request) {
     } = body;
 
     // Fallbacks to handle legacy and new payload field names
-    const name = String(projectName || title || 'Untitled Project').trim();
-    const prob = String(projectProblem || problem || '').trim();
-    const sol = String(projectSolution || solution || '').trim();
-    const ben = String(projectBenefits || benefits || '').trim();
+    const name = toText(projectName ?? title) || 'Untitled Project';
+    const prob = toText(projectProblem ?? problem);
+    const sol = toText(projectSolution ?? solution);
+    const ben = toText(projectBenefits ?? benefits);
 
-    if (!name || !prob || !sol || !ben) {
+    if (!prob || !sol || !ben) {
       return NextResponse.json(
         { error: 'Project name, problem, solution, and benefits are required.' },
         { status: 400 }
@@ -51,10 +84,6 @@ export async function POST(req: Request) {
       .replace(/[^a-z0-9]+/g, '-')
       .replace(/(^-|-$)+/g, '') + `-${Date.now()}`;
 
-    const imageArray = typeof images === 'string'
-      ? images.split('\n').map((url: string) => url.trim()).filter(Boolean)
-      : Array.isArray(images) ? images : [];
-
     const project = await prisma.project.create({
       data: {
         title: name,
@@ -62,16 +91,17 @@ export async function POST(req: Request) {
         problem: prob,
         solution: sol,
         benefits: ben,
-        shortDescription: String(shortDescription || prob),
-        description: String(description || sol),
+        shortDescription: toText(shortDescription) || prob,
+        description: toText(description) || sol,
         categoryId: String(categoryId),
         status: status || 'DRAFT',
         featured: Boolean(featured),
-        price: parseFloat(price) || 0,
-        liveDemoUrl: liveDemoUrl || null,
-        projectUrl: projectUrl || null,
-        downloadFolder: projectZipUrl || null,
-        images: imageArray,
+        price: Number.parseFloat(String(price)) || 0,
+        currency: toCurrency(currency),
+        liveDemoUrl: toText(liveDemoUrl) || null,
+        projectUrl: toText(projectUrl) || null,
+        downloadFolder: toText(projectZipUrl) || null,
+        images: toUrlList(images),
       },
     });
 

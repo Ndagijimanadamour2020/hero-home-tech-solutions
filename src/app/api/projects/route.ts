@@ -1,7 +1,14 @@
+export const dynamic = 'force-dynamic';
+
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
+import { isAdmin } from '@/lib/auth';
 
 export async function POST(req: Request) {
+  if (!(await isAdmin())) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
     const body = await req.json();
 
@@ -15,6 +22,7 @@ export async function POST(req: Request) {
       liveDemoUrl,
       images,
       projectZipUrl,
+      currency,
       categoryId,
       shortDescription,
       description,
@@ -56,6 +64,9 @@ export async function POST(req: Request) {
         categoryId: String(categoryId),
         projectUrl: projectUrl || null,
         price: parseFloat(price) || 0,
+        currency: ['RWF', 'USD', 'EUR'].includes(String(currency).toUpperCase())
+          ? String(currency).toUpperCase()
+          : 'RWF',
         liveDemoUrl: liveDemoUrl || null,
         images: imageArray,
         downloadFolder: projectZipUrl || null,
