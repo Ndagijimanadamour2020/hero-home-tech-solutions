@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact Us | Hero Home Tech Solutions</title>
+  <meta name="description" content="Contact Hero Home Tech Solutions to discuss your website, custom software, or automation project in Rwanda and East Africa.">
+  <link rel="icon" href="favicon.ico">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="navbar">
+    <div class="container nav-container">
+      <a href="index.html" class="brand">
+        <span class="brand-logo">H</span>
+        <span class="brand-name">Hero Home <span>Tech</span></span>
+      </a>
+      
+      <nav aria-label="Main Navigation">
+        <ul class="nav-links" id="navMenu">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="contact.html" class="active" aria-current="page">Contact</a></li>
+        </ul>
+      </nav>
+
+      <div class="nav-actions">
+        <a href="contact.html" class="btn btn-primary">Start a Project</a>
+        <button class="hamburger" id="navToggle" aria-label="Toggle Navigation Menu" aria-expanded="false" aria-controls="navMenu">
+          <span class="bar"></span>
+          <span class="bar"></span>
+          <span class="bar"></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page Header -->
+  <section class="page-header">
+    <div class="container text-center">
+      <span class="badge">Let's Connect</span>
+      <h1>Start Your Project Conversation</h1>
+      <p class="section-subtitle">Reach out to discuss your software, web development, or automation requirements.</p>
+    </div>
+  </section>
+
+  <!-- Contact Section -->
+  <section class="section">
+    <div class="container grid grid-2">
+      
+      <!-- Contact Info Sidebar -->
+      <div>
+        <h2 class="section-title">Get In Touch</h2>
+        <p class="text-muted mb-4">We are available to discuss project specifications, technical feasibility, and system architectures.</p>
+
+        <div class="card bg-light mb-3">
+          <h3>📍 Location</h3>
+          <p class="text-muted">Rwanda (Serving clients across East Africa &amp; internationally)</p>
+        </div>
+
+        <div class="card bg-light mb-3">
+          <h3>✉️ Email Address</h3>
+          <p class="text-muted js-placeholder-email">YOUR_EMAIL_ADDRESS</p>
+        </div>
+
+        <div class="card bg-light mb-4">
+          <h3>📱 WhatsApp &amp; Phone</h3>
+          <p class="text-muted js-placeholder-phone">YOUR_WHATSAPP_NUMBER</p>
+          <button class="btn btn-primary btn-sm mt-2 js-whatsapp-trigger">Direct WhatsApp Chat</button>
+        </div>
+
+        <div class="chat-bubble left" style="max-width: 100%;">
+          💡 <strong>Quick Response Note:</strong> Submitting the inquiry form will automatically format your project details and generate a pre-filled WhatsApp message.
+        </div>
+      </div>
+
+      <!-- Contact Form -->
+      <div class="card border-green">
+        <h3 class="mb-3">Project Inquiry Form</h3>
+        <p class="text-muted small mb-4">Fill in your requirements below. The form will generate a structured WhatsApp message for direct submission.</p>
+
+        <form id="contactForm" class="contact-form" novalidate>
+          <div class="form-group">
+            <label for="fullName">Full Name <span class="required">*</span></label>
+            <input type="text" id="fullName" class="form-control" placeholder="Enter your full name" required>
+            <span class="error-msg" id="fullNameError">Please enter your name.</span>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email Address <span class="required">*</span></label>
+            <input type="email" id="email" class="form-control" placeholder="name@company.com" required>
+            <span class="error-msg" id="emailError">Please enter a valid email address.</span>
+          </div>
+
+          <div class="form-group">
+            <label for="phone">Phone / WhatsApp Number</label>
+            <input type="tel" id="phone" class="form-control" placeholder="+250 ...">
+          </div>
+
+          <div class="form-group">
+            <label for="service">Service Interested In <span class="required">*</span></label>
+            <select id="service" class="form-control" required>
+              <option value="">-- Select Service --</option>
+              <option value="Web Development">Web Development</option>
+              <option value="Custom Software">Custom Software</option>
+              <option value="Automation">Automation</option>
+              <option value="SEO">SEO</option>
+              <option value="E-commerce">E-commerce</option>
+              <option value="Digital Transformation">Digital Transformation</option>
+              <option value="Other">Other Inquiry</option>
+            </select>
+            <span class="error-msg" id="serviceError">Please select a service.</span>
+          </div>
+
+          <div class="form-group">
+            <label for="budget">Estimated Budget Range (RWF)</label>
+            <select id="budget" class="form-control">
+              <option value="Not sure yet">Not sure yet</option>
+              <option value="Below 500,000 RWF">Below 500,000 RWF</option>
+              <option value="500,000 - 1,500,000 RWF">500,000 – 1,500,000 RWF</option>
+              <option value="1,500,000 - 5,000,000 RWF">1,500,000 – 5,000,000 RWF</option>
+              <option value="5,000,000+ RWF">5,000,000+ RWF</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label for="description">Project Description <span class="required">*</span></label>
+            <textarea id="description" class="form-control" rows="4" placeholder="Describe your business goal, current manual challenges, or software requirements..." required></textarea>
+            <span class="error-msg" id="descriptionError">Please provide brief project details.</span>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-block">Send via WhatsApp</button>
+        </form>
+
+        <div id="formSuccess" class="alert alert-success mt-3" style="display: none;">
+          ✅ Your inquiry has been processed! Redirecting to WhatsApp to submit your formatted details...
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <a href="index.html" class="brand mb-3">
+          <span class="brand-logo">H</span>
+          <span class="brand-name">Hero Home <span>Tech</span></span>
+        </a>
+        <p class="text-muted mb-3">Connecting forward-thinking organizations with practical software engineering.</p>
+      </div>
+      <div>
+        <h4 class="footer-title">Navigation</h4>
+        <ul class="footer-links">
+          <li><a href="index.html">Home</a></li>
+          <li><a href="about.html">About Us</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="portfolio.html">Portfolio</a></li>
+          <li><a href="blog.html">Blog</a></li>
+          <li><a href="contact.html">Contact</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-title">Services</h4>
+        <ul class="footer-links">
+          <li><a href="services.html#web-dev">Web Development</a></li>
+          <li><a href="services.html#custom-software">Custom Software</a></li>
+          <li><a href="services.html#automation">Automation</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4 class="footer-title">Contact</h4>
+        <p class="text-muted mb-2">Location: Rwanda</p>
+        <p class="text-muted mb-2">Email: <span class="js-placeholder-email">YOUR_EMAIL_ADDRESS</span></p>
+      </div>
+    </div>
+    <div class="container footer-bottom">
+      <p>&copy; 2026 Hero Home Tech Solutions. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Floating WhatsApp -->
+  <a href="#" class="floating-whatsapp js-whatsapp-trigger" aria-label="Chat with us on WhatsApp" title="Chat with us on WhatsApp">
+    <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946.003-6.556 5.338-11.891 11.893-11.891 3.181.001 6.167 1.24 8.413 3.488 2.245 2.248 3.481 5.236 3.48 8.414-.003 6.557-5.338 11.892-11.893 11.892-1.99-.001-3.951-.5-5.688-1.448l-6.305 1.654zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884-.001 2.225.651 3.891 1.746 5.634l-.999 3.648 3.742-.981z"/></svg>
+  </a>
+
+  <script src="assets/js/script.js"></script>
+</body>
+</html>
